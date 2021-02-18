@@ -1,0 +1,268 @@
+<!doctype html>
+<html  lang="en">
+<head>
+<meta charset="utf-8">
+<title>Water hardness calculator</title>
+<style>
+	
+	
+	html, body{ margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+                font-family: 'Open Sans',Arial,Tahoma,Verdana,sans-serif;		}
+	
+	
+	body {		
+				background-color:transparent;
+                max-width: 550px;
+                min-height: 840px;
+                margin: auto;
+                border-radius: 15px;
+                padding: 15px;
+                margin: 15px;		  }
+	
+	
+	input, select, textarea, number {
+                font-size: 100%;
+                font-family: 'Open Sans',Arial,Tahoma,Verdana,sans-serif;	}
+
+
+	input, select, number {   
+                color: #27274d;
+                border: 1px solid #C2C2C2;
+                padding: 10px;
+                margin: 5px;
+                text-align: right;
+                font-size: 16px;
+                border-radius: 10px;	}
+	
+	
+	input[type="text"]  { 
+				 background-color:white; 
+				 width:50px 	} 
+	
+	input.form-output {
+				background-color: #f9f9f9;
+   				box-shadow: inset 0px 0 3px 1px rgb(223 223 223); 	}
+	
+	
+	select:focus, input:focus { 
+				outline: 0px;
+				box-shadow: 0 0 5px rgb(142 142 142);		}
+	
+	
+	form {		padding: 10px 20px 0px 30px; 	}
+	
+	
+	
+/*	  		 --  correct select expand --    		  */
+	
+	 select   { padding: 10px 15px 10px 8px; 
+                max-width: 130px; 
+                appearance: none;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'  fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") #ffffff no-repeat center right ;
+                text-overflow: ellipsis;		}
+	
+	 select::-ms-expand {  display: none; 	}  /*  delete IE select expand  */
+	
+	
+	
+/* 		----- color range -----	  */
+	
+	 input[type=range] {
+				appearance: none;
+				color: transparent;
+				width: 90%;
+				background: none;
+				border: none;		}
+	
+
+    input[type=range]::-webkit-slider-runnable-track {
+				background: rgb(118,233,255);
+				background: linear-gradient(to right, rgba(118,233,255,1) 4%, rgba(177,181,23,1) 24%, rgba(187,46,6,1) 67%, rgba(149,14,53,1) 96%);
+				border-radius: 5px;
+	}
+	
+	 input[type=range]::-moz-range-track {
+				background: rgb(118,233,255);
+				background: linear-gradient(to right, rgba(118,233,255,1) 4%, rgba(177,181,23,1) 24%, rgba(187,46,6,1) 67%, rgba(149,14,53,1) 96%);
+				border-radius: 5px;
+				height: 40px;		}
+	
+
+    input[type=range]::-webkit-slider-thumb {
+                appearance: none;
+                background: #00A0E8;
+                width: 7px;
+                height: 40px;
+                border-radius: 0px;
+                border: 1px solid #00A0E8;
+			 	margin: -2px;  }
+	
+	
+	 input[type=range]::-moz-range-thumb  {
+                appearance: none;
+                background: #00A0E8;
+                width: 5px;
+                height: 40px;
+                border-radius: 2px;
+                border: 1px solid #00A0E8;	 }
+
+
+	
+	.col {		width: 100%;
+				border-radius: 0px 0px 15px 15px;
+				background-color: #f1f1f1;			}
+	
+	
+	.row, .btn {margin-top: 25px;
+				margin-bottom: 25px		}
+	
+	.first {	margin-top: 5px;}
+	
+	#rng {		margin-bottom: 20px;
+				filter: grayscale(95%) opacity(0.5);	}
+	
+	
+	.btn {	    text-align: center;
+                display: block;
+                text-transform: uppercase;
+                cursor: pointer;
+                background: #00a0e8;
+                border: 0px;
+                color: #fff;
+                max-width: 200px;
+                width: 100%;
+                font-weight: 600;
+                border-radius: 25px;
+                transition: all 0.10s ease-in-out;
+                margin-left: auto;
+				margin-right: auto;
+                position: relative;		}
+	
+	
+	.btn:hover {background-color: #27274d;}
+	.btn:active{background-color: #77ABEF;}
+	
+	
+	.txt-col {	display: inline-block;
+   				width: 250px;	}
+
+	
+	.ime  {		background-color: #E6E6E6;
+				background-position: 100% 0;
+				border-radius: 15px 15px 0px 0px;
+				font-size: 22px;
+				font-weight: 600;
+				text-align: center;
+				padding: 10px;	}
+	
+
+	.jst  {		text-align: justify;
+				text-align-last: justify;
+				padding-right: 22%;	
+				margin-top: 35px;}
+	
+	@media (	max-width: 530px)	{
+	.row   {	margin-top: 5px;
+				margin-bottom: 5px;		}	}
+	
+	
+	</style>
+	<script>
+                    function docalc()
+                    {
+                    var mg=1, de=17.8, fr=10.0, en=14.3, mmol=100, mval=50, rng=17.8; // conversion factors between the various units
+						
+                    var input=document.calc.input.value,
+						typ=document.calc.type.value,
+						input=input.replace(",","."); 
+					// form input select option
+					var vlue =  (typ=="de") ? input*de :
+                                (typ=="fr") ? input*fr :
+                                (typ=="en") ? input*en :
+                                (typ=="mg") ? input*mg :
+                                (typ=="mmol") ? input*mmol :
+												input*mval ;
+					// set the value of an input field
+                    document.calc.de.value=(vlue/de).toPrecision(3); 
+                    document.calc.fr.value=(vlue/fr).toPrecision(3);
+                    document.calc.en.value=(vlue/en).toPrecision(3);
+                    document.calc.mg.value=(vlue/mg).toPrecision(3);
+                    document.calc.mmol.value=(vlue/mmol).toPrecision(3);
+                    document.calc.mval.value=(vlue/mval).toPrecision(3);
+                    document.calc.rng.value=(vlue/rng).toPrecision(3);
+                    document.calc.rng.style.filter=("grayscale(0%)");    // gray to color range
+                    }		
+	</script>
+</head>
+
+<body>
+    <div class="ime">
+<p>Water hardness calculator</p>
+    </div>
+	<div class="col">
+      <form class="form" name="calc">
+          <div class="row first">
+            <span class="txt-col">Enter hardness value</span>
+			  <input class="form-input" type="text" placeholder="0" id="input" name="input" autocomplete="off">
+			  
+			  <select id="type" name="type">
+				<option class="de" value="de" title="German degree" >°dH (dGH, °n, °d)</option>
+				<option value="fr" title="French degree">°fH (°f, 10mg/l CaCO₃)</option>
+				<option value="en" title="English degrees">°e (°Clark, e)</option>
+				<option value="mg" title="Parts per million" selected>ppm (1mg/L CaCO₃)</option>
+				<option value="mmol" title="Millimoles per liter">mmol/l (millimoles per liter)</option>
+				<option value="mval" title="mval per liter" >mval/l (mval per liter)</option>
+			  </select>
+		  </div>
+		  
+			<div>
+			<input type="button" class="btn" name="submit" value="Calculate!" onclick="docalc()" >
+			</div>
+		 
+		    <div class="row">
+            <span class="txt-col" >German degree</span>
+            <input class="form-output" type="text" placeholder="0" disabled id="de" name="de" >
+			<span class="txt-jdn" >°dH</span>
+            </div>
+		 
+		    <div class="row">
+            <span class="txt-col">French degree</span>
+            <input class="form-output" type="text" placeholder="0" disabled id="fr" name="fr">
+			<span class="txt-jdn" >°fH</span>
+            </div>
+		 
+		    <div class="row">
+            <span class="txt-col">English degrees</span>
+            <input class="form-output" type="text" placeholder="0"  disabled id="en" name="en">
+			<span class="txt-jdn">°e</span>
+            </div>
+		 
+            <div class="row">
+            <span class="txt-col">Parts per million</span>
+            <input class="form-output" type="text" placeholder="0"  disabled id="mg" name="mg">
+			<span class="txt-jdn">ppm</span>
+            </div>
+		  
+            <div class="row">
+            <span class="txt-col">millimoles per liter</span>
+            <input class="form-output" type="text" placeholder="0" disabled id="mmol" name="mmol">
+			<span class="txt-jdn">mmol/l</span>
+            </div>
+		  
+            <div class="row">
+            <span class="txt-col">mval per liter</span>
+            <input class="form-output" type="text" placeholder="0" disabled id="mval" name="mval">
+			<span class="txt-jdn">mval/l</span>
+            </div>
+		  
+<!--		 color range  		  -->
+		    <div class="row"><div class="jst">Soft Hard</div>
+			<input type="range" min="0" max="30" value="1" id="rng" name="rng" disabled>											
+        	</div>
+		</form>
+	</div>
+</body>
+</html>
